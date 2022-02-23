@@ -59,7 +59,13 @@
 %\include{inhalt/Inhalt}
 
 %! Doku-/Testinhalt, diese Zeile bei Nutzung der Vorlage entfernen
-\include{vorlage/Doku-Test}
+%\include{vorlage/Doku-Test}
+
+%Alle Kapitel Dateien werden nummeriert eingefügt.
+\begin{pycode}
+from pathlib import Path
+print("\n".join(f"\\include{{{file.with_suffix('')}}}" for file in sorted(Path("inhalt").glob("Kapitel*.tex"))))
+\end{pycode}
 
 %? Quellen- und Literaturverzeichnis
 % Quellen neigen dazu, zu breite Zeilen durch (z.B.) schlecht umgebrochene URLs zu erzeugen, die sich kaum vermeiden lassen. --> Ignorieren
