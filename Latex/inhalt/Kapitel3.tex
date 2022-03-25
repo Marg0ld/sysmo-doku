@@ -1,1 +1,18 @@
 \section{Bereich 2}
+
+Aufgabe der einzelnen Komponenten in der verteilten Anwendung mit Spezifikation ihrer Schnittstelle hinsichtlich Datenaustausch (welche Daten in welchem Format).
+Je nach Thema: Betriebssystem und eventuell notwendige Bibliotheken nicht vergessen.
+
+- Einzelne Komponenten:
+Server:
+    Container-System --> Docker --> Compose
+    Beliebige Datenbank, erklären, warum wir eine Datenbank brauchen, erklären, welche wir genommen haben: MySQL --> Compose dafür
+    Webserver, alias Backend, erklären, was wir nehmen, warum Python, warum Flask --> Grundlegende Dockerfile, wie man einen eigenen Python Flask Container aufsetzt.
+    Templates werden gerendert.
+    Schnittstellen, zwischen Datenbank und Python, an der Stelle den Datenbankabrufcode reinballern.
+    Datenformate ddie ausgetauscht werden, sollten wir grundlegend erklären --> Flowchart
+    CDN --> Minio, um verschiedene Bilder zur Verfügung zu stellen, die man für die einzelnen Produkte braucht
+Client:
+    Benutzeroberfläche, die Daten von Flask abruft, dem Nutzer darstellt.
+    An der Stelle mal gucken, wie viel wir dann noch brauchen, bzw. worauf man hier eingehen könnte.
+    Darauf eingehen, dass auf Grund der Client -- Server-Struktur, dieser Teil nur minimale Anforderungen und Funktionalität besitzt.
