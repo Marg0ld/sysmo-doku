@@ -8,3 +8,74 @@ Umsetzung einer ausgewählten Funktionalität in einer der Sprachen Python, C\#,
 - mit Draw.io eine schöne Skizze für die Oberfläche machen, anders als Team Hauschild. (eventuell fix in TailwindCSS das Interface)
 - Produkt im Regal anzeigen --> Aus Datenbank Regalplatz für beliebiges Produkt herausfinden --> Anschließend, den Regalplatz markierne, und mittels Depth-First Suchalgorthimus, einen Weg zu diesen Platz im Supermarkt finden --> Python
 - Eventuell noch das Frontend in HTML designen, falls uns langweilig ist.
+
+
+\subsection{Visual Studio Code}
+
+\subsection{Raspberry Pi 4}
+\label{sec:raspi}
+\subsubsection{Installation und Einrichtung}
+Die in der Maske eingebauten Sensoren und der Mikrocontroller erfassen zahlreiche Daten und Informationen, die in diesem Kapitel ausgewertert werden sollen.
+Unsere Wahl fiel auf einen Raspberry Pi 4, da dieser uns noch zur Verfügung stand und keine Neuanschaffung notwendig wurde.
+Der Raspberry Pi 4 ist ein Einplatinencomputer mit zahlreichen Schnittstellen, z.B. USB, Ethernet, Bluetooth, WiFi und einem Micro-SD-Karten Slot für das \striche{Raspberry Pi OS}-Betriebssystem.
+Im Folgenden soll in Kurzfassung beschrieben werden, welche Schritte nötig sind, um mit einem Raspberry Pi Daten von einem ESP32 zu empfangen, diese zu speichern und anschließend auszuwerten.
+
+\begin{enumerate}[leftmargin=*]
+\item Steht der Raspberry Pi zur Verfügung und man besitzt eine Micro-SD-Karte, die man verwenden kann, ist es nötig das Betriebssystem herunterzuladen\vglink{https://www.raspberrypi.org/software/operating-systems/}{23.02.2021}.
+      Die Entscheidung fiel auf Raspberry Pi OS Lite, da keine grafische Benutzeroberfläche benötigt wird und dadurch Speicherplatz gespart werden kann.
+      Das heruntergeladene Image (*.iso - File) kann man nun mit einem beliebigen Programm, in unserem Fall Balena-Etcher\vglink{https://www.balena.io/etcher/}{23.02.2021} auf die SD-Karte schreiben.
+
+\item Im nächsten Schritt werden Änderungen an den Konfigurationsdateien des Raspberry Pi OS' vorgenommen. Dazu gehört das Einrichten einer WLAN-Verbindung und das Aktivieren von SSH, um den Raspberry Pi \striche{headless}, also ohne angeschlossenen Bildschirm \striche{remote} betreiben zu können.
+      Die Installation und eine Verbindung per SSH mittels der Software \striche{PuTTY}\vglink{https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html}{23.02.2021} war erfolgreich.
+      Auf dem Raspberry Pi kann nun die Software installiert werden, die für das beschriebene Ziel benötigt wird.
+
+\item Die Container Lösung Docker\onlinezitat{DOCKER2021} bietet einen Ansatz mit sogenannten \striche{Compose}-Dateien und bietet eine hohe Flexibilität der verwendeten Software.
+      Um Docker unter Raspberry Pi OS zu installieren führt man folgenden Befehl aus: \mintinline[breaklines]{bash}{curl -sSL https://get.docker.com | sh}.
+      Nach Abschluss müssen die Benutzerrechte unter Linux mit \mintinline[breaklines]{bash}{sudo usermod -aG docker pi} angepasst werden.
+      Der Standardnutzer \striche{pi@raspberry} darf nun auch Docker-Befehle ausführen.
+      Anschließend kann die Docker Installation mittels \mintinline[breaklines]{bash}{docker run hello-world} verifiziert werden.
+      Bei erfolgreichem Abschluss erscheint ein \striche{Hello World} auf dem Bildschirm und die Docker Container Runtime ist nun nutzbar.
+
+\item Es besteht die Möglichkeit, einen weiteren Bestandteil von Docker, nämlich Docker-Compose (dazu später mehr) zu installieren.
+      Dies ist mit dem folgenden Befehl möglich: \mintinline[breaklines]{bash}{sudo pip3 -v install docker-compose}.
+      Als Quelle für diese Installation diente die Docker Dokumentation und dev.to\vglink{https://dev.to/rohansawant/installing-docker-and-docker-compose-on-the-raspberry-pi-in-5-simple-steps-3mgl\#articles-list}{24.02.2021}.
+\end{enumerate}
+
+Mit dem Abschluss der Installation von Docker Compose und dem Test der Docker Engine steht einer Installation von verschiedenen Docker Images nichts mehr im Wege.
+
+\subsubsection{Software und Datenübertragung}
+\label{sec:compose}
+Der Raspberry Pi benötigt zur Datenerfassung eine Datenbank, die Entscheidung fiel auf MySQL, einen Webserver, in diesem Fall \striche{nginx}\vglink{https://www.nginx.com/}{27.02.2021} und eine Verwaltung der Datenbank \striche{phpMyAdmin}\vglink{https://www.phpmyadmin.net/}{27.02.2021}.
+Mit den im vorherigen Kapitel erwähnten Compose-Dateien von Docker ist ein solches Setup in wenigen Schritten aufsetzbar.
+Beispielhaft ist in Listing \ref{code:compose} die Installation eines \striche{nginx-Containers} gezeigt.
+Die vollständige Compose-Datei befindet sich im Anhang \striche{compose.yml}.
+Nach dem Abschluss der Installation kann die Datenübertragung an das Raspberry Pi erfolgen.
+\begin{code}[H]
+      \inputminted[linenos, breaklines, gobble=0, frame=none,
+      firstnumber=1,
+      firstline=19,
+      lastline=25,
+      numbers=left,
+      numbersep=5pt]{yaml}{code/compose.yml}
+      \caption{Compose Datei für einen Webserver-Stack}
+      \label{code:compose}
+\end{code}
+
+Der gezeigte Code und Ablauf soll beispielhaft für die Übertragung der Entfernung gezeigt werden, die GPS- und Temperaturübertragung erfolgt nach dem gleichen Schema und wird nicht weiter erklärt.
+
+In Vorbereitung der Datenübertragung wurde mittels phpMyAdmin eine Datenbank \striche{sysm} angelegt, die drei Tabellen enthält, eine davon ist die Entfernung.
+Im PHP-Code \ref{code:php} wird zunächst in den Zeilen $2$ - $11$ eine Verbindung zur MySQL-Datenbank hergestellt.
+Anschließend  wird die aktuelle Uhrzeit und das Datum ermittelt, die Entfernung, die per HTTP-GET Header vom ESP32 übertragen wird, ausgelesen und in die Variable \mintinline{php}{$entfernung} als Integer gespeichert.
+Aus dem ganzen wird eine SQL-Query in Zeile $20$ zusammengesetzt und anschließend in Zeile $22$ ausgeführt.
+Der Datensatz steht jetzt in der Datenbank und kann zu einem späteren Zeitpunkt (siehe Kapitel \ref{sec:datenauswertung} - \nameref{sec:datenauswertung}) ausgewertet werden.
+\begin{code}[H]
+      \inputminted[linenos, breaklines, gobble=0, frame=none,
+      firstnumber=1,
+      firstline=1,
+      lastline=28,
+      numbers=left,
+      numbersep=5pt]{php}{code/enf.php}
+      \caption{PHP-Datei zum Schreiben in die Datenbank}
+      \label{code:php}
+      \end{code}
+\newpage
