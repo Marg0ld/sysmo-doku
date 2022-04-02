@@ -1,4 +1,4 @@
-\section{Aufgabenbereich 1}
+\section{Aufgabenbereich 1 -- Architektur der Anwendung}
 Beschreibung der Anwendung, Architektur der Anwendung hinsichtlich Hardware und Verteilung der Anwendung.
 Dazu gehört auch die Auswahl des mobilen Endgerätes.
 
@@ -8,30 +8,80 @@ Praktisch wäre es eine mobile Anwendung zu entwickeln die genau in diesem Punkt
 Unser Ziel ist es, eine solche Lösung möglichst benutzerfreundlich und mit geringen Anforderungen an das mobile Endgerät zu entwickeln. \onlinezitat{DOCKER}
 
 
-
 \subsection{Aufbau der Anwendung}
 \subsubsection{Allgemeiner Aufbau}
-Die Anwendung ist wie in Abbildung \ref{fig:sysmo1} zu sehen aufgebaut. 
+Die Anwendung ist wie in Abbildung \ref{fig:sysmo1} zu sehen aufgebaut. Diese teilt sich aus architektonischer Sicht in zwei grundlegende
+Bereiche auf.
+
+Auf der linken Seite ist der serverseitige Teil der Applikation zu sehen. Aufbauend auf der im folgenden Gliederungspunkt
+beschriebenen Hardwareauswahl, setzt die Funktionalität der Serverapplikation auf einer beliebigen linuxbasierten Distribution auf. Dieses
+bildet die Basis für das installieren einer Containerengine, welche für das Verwenden, Ausführen und Optimieren von sogennaten Containern 
+verantwortlich ist. \striche{Ein Container ist ein Softwarepaket, das alles Wichtige zum Ausführen von Software enthält: 
+Code, Laufzeit, Konfiguration und Systembibliotheken, damit das Programm auf jedem Hostsystem ausgeführt werden kann.}\onlinezitat{ITTALENTS} 
+Grundlage für die Funktionalität beschriebener Container bildet Virtualisierung. Diese stellt der Engine Systemressourcen, in diesem Fall
+in Form der Serverhardware zur Verfügung. Mittels dieser Funktionalität können Container betriebssystemunabhäniga ausgeführt, und je nach
+Ressourcenbedarf betrieben werden. Aufbauend auf dieser technischen Grundlage werden 3 Container benötigt um die gewünschte Applikation 
+betreiben zu können. 
+
+\begin{enumerate}[leftmargin=*]
+\item Datenbankcontainer: Dieser bildet die Grundlage der Anwendung, da mittels einer beliebigen Datenbank Produktdaten, deren Standort
+      und weitere notwenige Daten verwaltet und gespeichert werden. Über eine Schnittstelle in Form einer \ac{API} können die restliche 
+      Applikationscontainer auf diese zugreifen.
+
+\item Webserver: Dieser stellt die grafische Benutzeroberfläche für den Client zur Verfügung. Das heißt, dieser überträgt Dokumente (.html, u.ä.)
+      an den Client, welcher diese mittels Browser öffnet bzw. darstellt.
+
+\item Software-Backend: Dieser Container bildet den Kern der serverseitigen Applikation. Alle Clientanfragen, Datenbankkomunikationen
+      und Webserver Events werden von einem Programm innerhalb des Containers bearbeitet und gesteuert.      
+\end{enumerate}
+
+Zusammenfassend ist der serverseitige Aufbau der Anwendung die Grundlage für die Umsetzung der reinen, in der Zielstellung erläuterten 
+Funktionalität. Für das Benutzen dieser, ist ein weiterer Architekturteil notwendig, welcher folgend erläutert wird.
+
+Auf der rechten Seite der Abbildung \ref{fig:sysmo1} ist der clientseitige Teil der Applikation dargestellt. Unter der Maßgabe, 
+die Anwendung möglichst vielen Nutzern zur Verfügung stellen zu können teilt sich das Schaubild in zwei Unterkategorien auf. 
+Für das Nutzen der Anwendung im Supermarkt oder unterwegs, wird von seiten des Servers eine auf mobile Engeräte abgestimmte Website 
+zur Verfügung gestellt. Diese kann betriebssystemunabhänig mittels des vorinstallierten Browser z.B. Safari, Chrome u.ä. aufgerufen werden.
+Für das Verwenden von stationären Endgeräten wird ebenfals eine Website zur Verfügung gestellt, welche über einen Browser aufgerufen werden kann.
+So ist die die Appliaktion auch für die Einkaufsplanung von zu Hause aus verwendbar. 
 
 \bild[1.0]{sysmo1}{Theoretischer Aufbau der Anwendung}{fig:sysmo1}
 
-Bei unserer Art der Umsetzung wird nahezu die vollständige 
-Abwicklung und Datenbereitstellung über das Backend betrieben.
-Eine ausführliche Beschreibung des Backends findet sich im Kapitel \ref{sec:backend} - \nameref{sec:backend}.
+
+Abschließend ist aus der architektonischen Betrachtung der Anwendung ersichtlich, dass diese möglichst plattformunahängig erstellt werden soll.
+Innerhalb des Belegs soll nahezu die vollständige Abwicklung und Datenbereitstellung über das serverseitige contaier-basierte Backend erfolgen.
+Eine ausführliche Beschreibung des Backends findet sich im Kapitel \ref{sec:backend} - \refname{sec:backend}. 
 
 Lediglich die Darstellung der Daten und die Nutzerinteraktion wird im Frontend abgewickelt.
 Die Vorraussetzungen hierfür werden ausführlich im Kapitel \ref{sec:frontend} - \nameref{sec:frontend} beschrieben.
 
 \subsubsection{Frontend}
 \label{sec:frontend}
+Das Frontend der Applikation setzt sich aus 3 Bereichen zusammen, welche im nachfolgenden Abschnitt genauer beschrieben und erläutert werden.
+Beipielhaft wird in der folgenden Abbildung \ref{fig:frontend}, aufgrund von Größe und Übersichtlichkeit der Webbrwoser eines stationären 
+Endgerätes dargestellt.
+
+Abschnitt 1 gibt dem Nutzer die Möglichkeit mittels eines einfach zu benutzenden Filters, das gewünschte Produkt in der Datenbank zu finden.
+Im Eingabfeld (1) besteht die Möglichkeit per Textbox den Poduktnamen oder den Produktcode einzugeben. Auch allgemeine Begriffe können hier
+eingegeben werden, um eine Auswahl von Produkten zu erhalten. Mittels Filterbox (2) kann eine Produktkategorie ausgewählt werden. Dadurch erhält 
+der Nutzer die Möglichkeit, die Suche weiter einzugrenzen mit dem Ziel auch ohne eine spezifische Prouktbezeichnung den gewünschten Artikel 
+zu finden. Die Filterbox (3) bietet eine weitere Möglichkeit zusätzliche Suchparameter zu setzten, um eine performantere Suche zu erzielen.
+Nach der Eingabe der produktspezifischen Daten wird mit dem Klicken des "OK-Buttons" eine Anfrage an den Applikationsserver gesendet. 
+Der Abschnitt 2 dient zur Darstellung der Suchergebnisse, basierend auf den zuvor gewählten Suchparametern. Dabei wird in der Listbox (4) 
+eine Auflistung aller zur Suche passenden Einträge der Datenbank dargestellt. Um einen Artikel zu selektieren, muss der Nutzter die entsprechende
+Zeile per Mausklick anklicken und mit dem zugehörigen "OK-Button" bestätigen. Anschließend wird im Bereich 3 der Weg zum Produkt im Supermarkt
+angezeigt.
+
+\bild[0.8]{frontend}{Theoretischer Aufbau der Anwendung}{fig:frontend}
+
+Ziel der Frontend Gestaltung ist es, eine möglichst einfache und leicht zu bedienende Benutzeroberfläche zu schaffen die für jede Altersgruppe 
+verwendbar ist. Potentiell soll jeder Supermarkt Kunde mit einem internetfähigen Endgerärt die Applikation verwenden können. 
+
+
+
 \subsubsection{Backend}
 \label{sec:backend}
 
 \subsection{Auswahl der Hardware}
 \subsubsection{Clients}
 \subsubsection{Server}
-
-- Zusammenfassung der Anwendung, besteht aus einem Backend (Docker + MySQL + Python + Flask), und einem Frontend (umgesetzte WebApp, basierend auf TailwindCSS und HTMl, und JavaScript)
-- Architektur der Anwendung: Bestehend aus einem Client / Server Modell --> Hardware beliebiger virtualisierungsfähiger Server, der in der Lage ist Container alias Docker / Kubernetes  zu hosten und einem Client, der keinerlei Vorraussetzungen als einen Webbrowser benötigt.
-- Verteilung: Server der das Backend enthält und beliebige Clients, die sich zum Backend verbinden können.
-- Auswahl des mobilen Endgerätes: Beliebiges mobiles Endgerät, da durch eine Serverseitige Anwendung wie Flask, und einer Client Umsetzung durch TailwindCSS keinerlei Vorraussetzungen benötigt werden, ist die App für alle mobilen Endgeräte, die einen Browser besitzen, der HTML5 und CSS3 beherrscht.
