@@ -5,7 +5,7 @@ Dazu gehört auch die Auswahl des mobilen Endgerätes.
 \subsection{Beschreibung der Anwendung}
 Wer kennt es nicht? Manchmal wird es zu einem wahren Gang durchs Labyrinth einen bestimmten Artikel im Supermarkt zu finden.
 Praktisch wäre es eine mobile Anwendung zu entwickeln die genau in diesem Punkt Abhilfe verschaffen kann.
-Unser Ziel ist es, eine solche Lösung möglichst benutzerfreundlich und mit geringen Anforderungen an das mobile Endgerät zu entwickeln. \onlinezitat{DOCKER}
+Unser Ziel ist es, eine solche Lösung möglichst benutzerfreundlich und mit geringen Anforderungen an das mobile Endgerät zu entwickeln.
 
 
 \subsection{Aufbau der Anwendung}
@@ -19,8 +19,7 @@ bildet die Basis für das installieren einer Containerengine, welche für das Ve
 verantwortlich ist. \striche{Ein Container ist ein Softwarepaket, das alles Wichtige zum Ausführen von Software enthält: 
 Code, Laufzeit, Konfiguration und Systembibliotheken, damit das Programm auf jedem Hostsystem ausgeführt werden kann.}\onlinezitat{ITTALENTS} 
 Grundlage für die Funktionalität beschriebener Container bildet Virtualisierung. Diese stellt der Engine Systemressourcen, in diesem Fall
-in Form der Serverhardware zur Verfügung. Mittels dieser Funktionalität können Container betriebssystemunabhäniga ausgeführt, und je nach
-Ressourcenbedarf betrieben werden. Aufbauend auf dieser technischen Grundlage werden 3 Container benötigt um die gewünschte Applikation 
+in Form der Serverhardware zur Verfügung. Mittels dieser Funktionalität können Container betriebssystemunabhängig ausgeführt, und je nach Ressourcenbedarf betrieben werden. Aufbauend auf dieser technischen Grundlage werden 3 Container benötigt um die gewünschte Applikation 
 betreiben zu können. 
 
 \begin{enumerate}[leftmargin=*]
@@ -47,17 +46,16 @@ So ist die die Appliaktion auch für die Einkaufsplanung von zu Hause aus verwen
 
 \bild[1.0]{sysmo1}{Theoretischer Aufbau der Anwendung}{fig:sysmo1}
 
-
 Abschließend ist aus der architektonischen Betrachtung der Anwendung ersichtlich, dass diese möglichst plattformunahängig erstellt werden soll.
 Innerhalb des Belegs soll nahezu die vollständige Abwicklung und Datenbereitstellung über das serverseitige contaier-basierte Backend erfolgen.
-Eine ausführliche Beschreibung des Backends findet sich im Kapitel \ref{sec:backend} - \refname{sec:backend}. 
+Eine ausführliche Beschreibung des Backends findet sich im Kapitel \ref{sec:backend} - \nameref{sec:backend}. 
 
 Lediglich die Darstellung der Daten und die Nutzerinteraktion wird im Frontend abgewickelt.
 Die Vorraussetzungen hierfür werden ausführlich im Kapitel \ref{sec:frontend} - \nameref{sec:frontend} beschrieben.
 
 \subsubsection{Frontend}
 \label{sec:frontend}
-Das Frontend der Applikation setzt sich aus 3 Bereichen zusammen, welche im nachfolgenden Abschnitt genauer beschrieben und erläutert werden.
+Das Frontend der Applikation setzt sich aus drei Bereichen zusammen, welche im nachfolgenden Abschnitt genauer beschrieben und erläutert werden.
 Beipielhaft wird in der folgenden Abbildung \ref{fig:frontend}, aufgrund von Größe und Übersichtlichkeit der Webbrwoser eines stationären 
 Endgerätes dargestellt.
 
@@ -66,17 +64,16 @@ Im Eingabfeld (1) besteht die Möglichkeit per Textbox den Poduktnamen oder den 
 eingegeben werden, um eine Auswahl von Produkten zu erhalten. Mittels Filterbox (2) kann eine Produktkategorie ausgewählt werden. Dadurch erhält 
 der Nutzer die Möglichkeit, die Suche weiter einzugrenzen mit dem Ziel auch ohne eine spezifische Prouktbezeichnung den gewünschten Artikel 
 zu finden. Die Filterbox (3) bietet eine weitere Möglichkeit zusätzliche Suchparameter zu setzten, um eine performantere Suche zu erzielen.
-Nach der Eingabe der produktspezifischen Daten wird mit dem Klicken des "OK-Buttons" eine Anfrage an den Applikationsserver gesendet. 
+Nach der Eingabe der produktspezifischen Daten wird mit dem Klicken des \striche{OK-Buttons} eine Anfrage an den Applikationsserver gesendet. 
 Der Abschnitt 2 dient zur Darstellung der Suchergebnisse, basierend auf den zuvor gewählten Suchparametern. Dabei wird in der Listbox (4) 
 eine Auflistung aller zur Suche passenden Einträge der Datenbank dargestellt. Um einen Artikel zu selektieren, muss der Nutzter die entsprechende
-Zeile per Mausklick anklicken und mit dem zugehörigen "OK-Button" bestätigen. Anschließend wird im Bereich 3 der Weg zum Produkt im Supermarkt
+Zeile per Mausklick anklicken und mit dem zugehörigen \striche{OK-Button} bestätigen. Anschließend wird im Bereich 3 der Weg zum Produkt im Supermarkt
 angezeigt.
 
-\bild[0.8]{frontend}{Theoretischer Aufbau der Anwendung}{fig:frontend}
+\bild[1.0]{frontend}{Theoretischer Aufbau der Anwendung}{fig:frontend}
 
 Ziel der Frontend Gestaltung ist es, eine möglichst einfache und leicht zu bedienende Benutzeroberfläche zu schaffen die für jede Altersgruppe 
 verwendbar ist. Potentiell soll jeder Supermarkt Kunde mit einem internetfähigen Endgerärt die Applikation verwenden können. 
-
 
 
 \subsubsection{Backend}
@@ -84,4 +81,32 @@ verwendbar ist. Potentiell soll jeder Supermarkt Kunde mit einem internetfähige
 
 \subsection{Auswahl der Hardware}
 \subsubsection{Clients}
+Da die Anwendung clientseitig als WebApp ausgelegt ist, dass heißt primär als HTML5 Dokument im Browser läuft und sämtliche ressourcenaufwändigen Datenverarbeitungsprozesse serverseitig stattfinden,
+werden an das mobile Endgerät nur sehr geringe Anforderungen gestellt, wodurch fast jedes handelsübliche Smartphone verwendet werden kann. Allerdings muss die vom Gerät unterstützte Software,
+speziell ein vom entsprechenden Betriebssystem unterstützter Browser, HTML5 und CSS3 beherrschen. 
+
+Desweiteren ist zur Verwendung der App aufgrund des Client-Server Modells zwingend eine Netzwerkverbindung zwischen Client und Server notwendig. 
+Zur besseren Skalierbarkeit der Lösung soll diese nicht über ein lokales Netzwerk, etwa durch ein im Supermarkt ausgestrahltes spezielles \ac{WLAN}, sondern über das Internet hergestellt werden, weshalb das Client-Gerät eine Internetverbindung, bevorzugt über das Mobilfunknetz, herstellen muss.
+
 \subsubsection{Server}
+Bei der Auswahl des Servers können viele verschiedene Richtungen eingeschlagen werden, welche ihre eigenen Vorteile, aber auch Nachteile besonders aufgrund ihrer Anforderungen haben.
+Zuerst muss hierbei die Entscheidung getroffen werden, ob die Serverinstallation In-House, also in einem direkt vom Supermarkt, bzw. der Supermarktkette betriebenen Rechenzentrum oder als Cloud-Lösung geschehen soll. 
+
+Erstere Variante ist zwar generell zu bevorzugen, da hierdurch eine wesentlich geringere Abhängigkeit von externen Einflüssen erzielt werden kann, jedoch ist der Betrieb eines eigenen Rechenzentrums, welches anerkannten technischen Standards entspricht, nur für große Supermarktketten realisierbar.
+Auf diese Variante soll im weiteren nicht weiter eingegangen werden, da ein entsprechendes Rechenzentrum oftmals bereits vorhandene und etablierte Infrasrukturen, wie eine ausfallsichere Virtualisierungs- bzw. Containerisierungsumgebung vorweist, welche für unsere Anwendung verwendet werden kann.
+
+Besonders jedoch für einzelne Supermärkte würde sich eine Cloud-Lösung anbieten, da hierdurch mit geringen Kosten eine relativ ausfallsichere Plattform für den Betrieb unserer Anwendung geschaffen werden kann.
+Nun gibt es wiederum mehrere Möglichkeiten eine solche cloudbasierte Lösung auszulegen, die für unsere Anwendung bevorzugte ist jedoch die Verwendung sogenannter \ac{VPS}.
+Bei \ac{VPS} handelt es sich um vollwertige, in der Regel linuxbasierte Server, die in den meisten Fällen als virtuelle Maschinen im Rechenzentrum des entsprechenden Cloudanbieters ausgeführt werden.
+Diese Server bieten geringe Ausfallzeiten und gute Performance, da Cloudanbieter oftmals noch vor privaten Rechenzentrumsbetreibern auf neue Hardware umstellen, da sie besonders stark von der erhöhten Effizienz neuerer Hardware profitieren.
+
+Auf diesem VPS empfehlen wir die Verwendung der Linuxdistribution Ubuntu, genauer die Version Ubuntu Server 20.04 LTS. 
+Als \ac{LTS}-Version erhält sie noch für längere Zeit aktiv Updates, Supportende ist erst im April 2025.
+Zudem wurden in der Server Version des als Desktop-Betriebssystems ausgelegten Ubuntu viele für einen Serverbetrieb unnötiger Pakete entfernt, unter anderem ist keine \ac{GUI} installiert.
+Ubuntu zeichnet sich besonders durch seine benutzerfreundliche Bedienung und gute Dokumentation aus.
+
+Weitergehend wird auf dem \ac{VPS} nun die Containermanagementumgebung Docker installiert und konfiguriert, welche eine einfache Bereitstellung unserer Anwendung ermöglicht.
+Alternativ kann, sollten noch höhere Verfügbarkeitsanforderungen gestellt werden, als sie ein einzelner \ac{VPS} abdecken kann, die Containerorchestrierungslösung Kubernetes\vglink{https://kubernetes.io/de/}{21.03.2022} verwendet werden, um ein hochverfügbares Cluster\vglink{https://www.redhat.com/de/topics/containers/what-is-a-kubernetes-cluster}{02.04.2022} aus mindestens drei Servern zu erstellen, von denen bis zu zwei ausfallen können ohne die Funktionalität der Anwendung zu beeinflussen.
+Dabei werden drei \ac{VPS} bei dem entsprechenden Cloudanbieter erstellt, dabei können oftmals sogenannte Failure-Domains definiert werden womit die Verteilung der drei Server auf unterschiedliche
+physische Rechenzentren erzwungen werden kann. 
+Diese drei virtuellen Server werden über ein separates, internes Netzwerk verbunden, damit sämtlicher Netzwerkdatenverkehr zwischen den Knoten nicht über das Internet übertragen werden muss.

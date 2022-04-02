@@ -18,7 +18,7 @@ with open("Latex/inhalt/Abkürzungen.tex", "r+", encoding="utf-8") as datei:
     liste = sorted(acros, key=(lambda x: x[0].upper()), reverse=False)
     #print(liste)
     #print(inhalt)
-with open("Latex/inhalt/Abkürzung_sortiert.tex", "w+", encoding="utf-8") as neu:
+with open("Latex/inhalt/Abkürzungen.tex", "w+", encoding="utf-8") as neu:
     i = 0
     anzahl = len(liste)
     #print(anzahl)
