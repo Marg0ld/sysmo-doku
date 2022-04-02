@@ -50,21 +50,31 @@ und die Nutzerinteraktion wird im Frontend durcheführt.
 
 \subsubsection{Frontend}
 \label{sec:frontend}
+Das Frontend der Applikation setzt sich aus 3 Bereichen zusammen, welche im nachfolgenden Abschnitt genauer beschrieben und erläutert werden.
+Beipielhaft wird in der folgenden Abbildung \ref{fig:frontend}, aufgrund von Größe und Übersichtlichkeit der Webbrwoser eines stationären 
+Endgerätes dargestellt.
+
+Abschnitt 1 gibt dem Nutzer die Möglichkeit mittels eines einfach zu benutzenden Filters, das gewünschte Produkt in der Datenbank zu finden.
+Im Eingabfeld (1) besteht die Möglichkeit per Textbox den Poduktnamen oder den Produktcode einzugeben. Auch allgemeine Begriffe können hier
+eingegeben werden, um eine Auswahl von Produkten zu erhalten. Mittels Filterbox (2) kann eine Produktkategorie ausgewählt werden. Dadurch erhält 
+der Nutzer die Möglichkeit, die Suche weiter einzugrenzen mit dem Ziel auch ohne eine spezifische Prouktbezeichnung den gewünschten Artikel 
+zu finden. Die Filterbox (3) bietet eine weitere Möglichkeit zusätzliche Suchparameter zu setzten, um eine performantere Suche zu erzielen.
+Nach der Eingabe der produktspezifischen Daten wird mit dem Klicken des "OK-Buttons" eine Anfrage an den Applikationsserver gesendet. 
+Der Abschnitt 2 dient zur Darstellung der Suchergebnisse, basierend auf den zuvor gewählten Suchparametern. Dabei wird in der Listbox (4) 
+eine Auflistung aller zur Suche passenden Einträge der Datenbank dargestellt. Um einen Artikel zu selektieren, muss der Nutzter die entsprechende
+Zeile per Mausklick anklicken und mit dem zugehörigen "OK-Button" bestätigen. Anschließend wird im Bereich 3 der Weg zum Produkt im Supermarkt
+angezeigt.
+
+\bild[0.8]{frontend}{Theoretischer Aufbau der Anwendung}{fig:frontend}
+
+Ziel der Frontend Gestaltung ist es, eine möglichst einfache und leicht zu bedienende Benutzeroberfläche zu schaffen die für jede Altersgruppe 
+verwendbar ist. Potentiell soll jeder Supermarkt Kunde mit einem internetfähigen Endgerärt die Applikation verwenden können. 
+
+
+
 \subsubsection{Backend}
 \label{sec:backend}
 
 \subsection{Auswahl der Hardware}
 \subsubsection{Clients}
 \subsubsection{Server}
-
-- Zusammenfassung der Anwendung, besteht aus einem Backend (Docker + MySQL + Python + Flask), und einem Frontend
-  (umgesetzte WebApp, basierend auf TailwindCSS und HTMl, und JavaScript)
-- Architektur der Anwendung: Bestehend aus einem Client / Server Modell --> Hardware beliebiger virtualisierungsfähiger 
-  Server, der in der Lage ist Container alias Docker / Kubernetes  zu hosten und einem Client, der keinerlei Vorraussetzungen 
-  als einen Webbrowser benötigt.
-- Verteilung: Server der das Backend enthält und beliebige Clients, die sich zum Backend verbinden können.
-- Auswahl des mobilen Endgerätes: Beliebiges mobiles Endgerät, da durch eine Serverseitige Anwendung wie Flask, und einer 
-  Client Umsetzung durch TailwindCSS keinerlei Vorraussetzungen benötigt werden, ist die App für alle mobilen Endgeräte, #
-  die einen Browser besitzen, der HTML5 und CSS3 beherrscht.
-
-  
